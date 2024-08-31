@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Commits Atômicos e Semânticos</title>
+  <link rel="stylesheet" href="https://unpkg.com/reveal.js/dist/reveal.css">
+  <link rel="stylesheet" href="https://unpkg.com/reveal.js/dist/theme/white.css">
+</head>
+<body>
+
+<div class="reveal">
+  <div class="slides">
+    <section>
+      <h1 class="r-fit-text">Convensionando Devs:</h1>
+      <h3 class="r-fit-text" style="color: #242424cc  ">abordando versionamento com Commits Atômicos e Semânticos</h3>
+    </section>
+
+    <section>
+      <h2>Quem sou eu?</h2>
+    </section>
+
+    <section data-transition="zoom">
+      <div style="display:flex; width: 100%">
+          <img
+              class="r-stretch"
+              src="img/eu.png"
+          />
+          <div>
+              <h3>Ronny John</h3>
+              <ul style="font-size: 2rem">
+                  <li class="fragment">Técnico em Informática</li>
+                  <li class="fragment">2º semestre de ADS na Unichristus</li>
+                  <li class="fragment">Desenvolvedor
+                    <ul>
+                      <li class="fragment"><b>PHP</b></li>
+                      <li class="fragment" style="color: #0008; font-size: 2rem">Javascript, <span style="font-size:1rem">Go e Kotlin</span></li>
+                    </ul>
+                  </li>
+                  <li class="fragment">Voluntário na <span style="color: #2a76dd">Frontend CE</span></li>
+                  <li class="fragment">Frequentador assíduo do <span style="color: skyblue">PHPinga</span></li>
+              </ul>
+          </div>
+      </div>
+      <aside class="notes">
+            Shhh, these are your private notes 📝
+        </aside>
+    </section>
+
+    <section>
+      <h2>Versionamento de código</h2>
+      <ul>
+        <li class="fragment fade-up">Manter o histórico de alterações</li>
+        <li class="fragment fade-up">Centralizar distribuição do código</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Commits Atômicos</h2>
+      <section>
+        <p>Um commit atômico é um commit que tem apenas um objetivo (corrigir, implementar ou refazer algo), que está 100% pronto e que todos os seus arquivos estejam dentro do mesmo contexto.</p>
+      </section>
+
+      <section>
+        <ul>
+          <li class="fragment">Resumir em poucas palavras;</li>
+          <li class="fragment">Não deve ser algo que está quebrando (ou não deveria quebrar);</li>
+          <li class="fragment">Se estiver mudando arquivos diferentes por motivos diferentes, o ideal é que eles sejam estejam em commits diferentes;</li>
+          <li class="fragment">Feito 2 alterações no mesmo arquivo por motivos diferentes, também devem estar em commits diferentes.</li>
+        </ul>
+      </section>
+    </section>
+
+    <section>
+      <h4>Exemplos:</h4>
+      <div style="font-size: 2rem; display: flex;">
+        <div class="fragment">
+          <p style="color: red">Múltiplas mudanças em um único commit.</p>
+          <a href="https://github.com/ronnyjohnti/mitoflix/commits/master/">
+            <img src="img/ex1.png" />
+          </a>
+        </div>
+
+        <div class="fragment">
+          <p style="color:green;">Cada mudança em seu próprio commit.</p>
+          <a href="https://github.com/ronnyjohnti/dripstore/commits/main/">
+            <img src="img/ex2.png">
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Commits Semânticos</h2>
+      <p class="fragment">Uso de convenções para nomes de commits.</p>
+      <p class="fragment">Define um conjunto de regras para criar um histórico de commit explícito, o que facilita a criação de ferramentas automatizadas.
+      </p>
+      <pre class="fragment"><code style="color: #646cff">tipo: descrição</code> (e.g., <code>feat: adiciona função de login</code>).</pre>
+    </section>
+
+    <section>
+      <h2>Tipos Comuns de Commits Semânticos</h2>
+      <section style="font-size: 2rem">
+        <p style="text-align: left" class="fragment"><strong style="color: green">fix:</strong> um commit do tipo fix soluciona um problema na sua base de código.</p>
+        <p style="text-align: left" class="fragment"><strong style="color: green">feat:</strong> um commit do tipo feat inclui um novo recurso na sua base de código.</p>
+        <p style="text-align: left" class="fragment"><strong style="color: green">BREAKING CHANGE:</strong> inclui uma modificação que quebra a compatibilidade da API. Uma BREAKING CHANGE pode fazer parte de commits de qualquer tipo.</p>
+        <p style="text-align: left" class="fragment">Outros: tipos adicionais são permitidos além de fix: e feat:, por exemplo @commitlint/config-conventional (baseado na Convenção do Angular) recomenda-se <strong style="color: green">chore:</strong>, <strong style="color: green">docs:</strong>, <strong style="color: green">style:</strong>, <strong style="color: green">refactor:</strong>, <strong style="color: green">perf:</strong>, <strong style="color: green">test:</strong>, entre outros.</p>
+      </section>
+
+      <section style="font-size: 2rem">
+        <ul>
+          <li><strong style="color: green">feat:</strong> Nova funcionalidade</li>
+          <li><strong style="color: green">fix:</strong> Correção de bug</li>
+          <li><strong style="color: green">docs:</strong> Mudanças na documentação</li>
+          <li><strong style="color: green">style:</strong> Formatação de código, não afeta o funcionamento</li>
+          <li><strong style="color: green">refactor:</strong> Refatoração de código, sem novas funcionalidades ou correções de bugs</li>
+        </ul>
+        <div>
+          <a href="https://medium.com/@noriller/docs-conventional-commits-feat-fix-refactor-which-is-which-531614fcb65a">Artigo sobre todos esses usos.</a>
+        </div>
+      </section>
+    </section>
+
+    <section>
+      <h2>Exemplos</h2>
+
+    </section>
+
+    <section>
+      <h2>Por que Usar Commits Semânticos?</h2>
+      <p><strong>Clareza:</strong> Facilita a leitura e compreensão do histórico.</p>
+      <p><strong>Automação:</strong> Integração com ferramentas como release notes automáticas.</p>
+    </section>
+
+    <section>
+      <h3>Versionamento Semântico (SemVer)</h3>
+      <section>
+        <ul>
+          <li><strong>Formato</strong> (Regras 2, 5, 6 e 7):
+            <p>Os softwares que utilizam versionamento semântico utilizam um padrão numérico dividido em três posições, como no exemplo:
+              <span style="color: #646cff">5.8.15.</span></p>
+          </li>
+        </ul>
+      </section>
+
+      <section style="font-size: 1.5rem">
+        <ul>
+          <li><strong>Major</strong>
+            <p>São as chamadas breaking changes, atualizações que possuem o potencial de “quebrar” códigos que utilizam versões anteriores.</p>
+            <pre>4.x.x → 5.x.x</pre>
+          </li>
+          <li><strong>Minor</strong>
+            <p>O segundo dígito informa a versão da funcionalidade, onde uma nova função ou melhoria substancial é adicionada e não há problemas de incompatibilidade com outras versões.</p>
+            <pre>5.1.x → 5.2.x</pre>
+          </li>
+          <li><strong>Patch</strong>
+            <p>O terceiro dígito informa a versão da correção de bugs, melhorias de desempenho ou alterações similares que não alteram as funcionalidades atuais e nem introduzem novas.</p>
+            <pre>5.2.0 → 5.2.1</pre>
+          </li>
+        </ul>
+      </section>
+      <section style="font-size: 2rem">
+        <p>Existem 12 regras que definem o SemVer e elas estão documentadas oficialmente em: <a href="https://semver.org/lang/pt-BR/.">https://semver.org/lang/pt-BR/</a>. Mas também há esse artigo no iMasters muito bem explicativo: <a href="https://imasters.com.br/codigo/versionamento-semantico-o-que-e-e-como-usar">https://imasters.com.br/codigo/versionamento-semantico-o-que-e-e-como-usar</a>.</p>
+      </section>
+    </section>
+
+    <section>
+      <h2>Keep a Changelog</h2>
+      <section>
+        <p style=" text-align: left">Um changelog é um arquivo que contém uma lista selecionada, ordenada cronologicamente, de mudanças significativas para cada versão de um projeto. </p>
+      </section>
+
+      <section style="font-size: 2rem">
+        <ul>
+          <li class="fragment"><strong>Changelogs são feitos para pessoas, não para máquinas.</strong></li>
+          <li class="fragment">Cada versão deve ter sua própria entrada.</li>
+          <li class="fragment">Agrupe as alterações por tipo.</li>
+          <li class="fragment">Permita que versões e seções possam ser vinculadas com links.</li>
+          <li class="fragment">A versão mais recente deve sempre aparecer primeiro.</li>
+          <li class="fragment">Inclua a data de lançamento de cada versão.</li>
+          <li class="fragment">Indique se você segue o versionamento semântico.</li>
+        </ul>
+        <div>
+          <a href="https://github.com/secultce/mapasculturais-v5/blob/develop/CHANGELOG.md">Exemplo</a>
+        </div>
+      </section>
+    </section>
+
+    <section>
+        <h2>Como Tudo se Relaciona</h2>
+        <p>Commits atômicos e semânticos garantem clareza e organização.</p>
+        <p>Ferramentas como <strong>Keep a Changelog</strong> e <strong>SemVer</strong> se beneficiam dessas práticas.</p>
+        <p>O uso de <strong>release notes automáticas</strong> depende da qualidade das mensagens de commit.</p>
+    </section>
+
+    <section>
+        <h2>Conclusão</h2>
+        <p>Adotar essas práticas melhora a organização, a comunicação e a eficiência no desenvolvimento.</p>
+        <p>Convite para adoção das práticas no projeto.</p>
+    </section>
+
+    <section>
+        <h2>LinkedIn</h2>
+      <img src="img/qr-code.png" alt="" style="max-height: 50vh">
+    </section>
+  </div>
+</div>
+
+<script src="https://unpkg.com/reveal.js/dist/reveal.js"></script>
+<script>
+  Reveal.initialize({
+    history: true,
+  });
+</script>
+
+</body>
+</html>
