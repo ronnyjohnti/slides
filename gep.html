@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A06:2021 - Componentes Vulneráveis e Desatualizados</title>
+  <link rel="stylesheet" href="https://unpkg.com/reveal.js/dist/reveal.css">
+  <link rel="stylesheet" href="https://unpkg.com/reveal.js/dist/theme/white.css">
+  <style>
+    .c-24 { color: #242424cc !important; }
+  </style>
+</head>
+<body>
+
+<div class="reveal">
+  <div class="slides">
+    <section>
+      <h1 class="r-fit-text">A06:2021 - Componentes Vulneráveis e Desatualizados</h1>
+      <h3 class="c-24" style="font-size: 1.3rem">(Vulnerable and Outdated Components)</h3>
+    </section>
+
+<!--    <section>-->
+<!--      <h2>Quem sou eu?</h2>-->
+<!--      <h4 class="c-24">(Who am I?)</h4>-->
+<!--    </section>-->
+
+<!--    <section data-transition="zoom">-->
+<!--      <div style="display:flex; width: 100%">-->
+<!--        <img-->
+<!--          class="r-stretch"-->
+<!--          src="https://github.com/ronnyjohnti/slides/blob/17bdb5789bc27f6e23b87bfc8834b6f5ec9024dd/img/eu.png?raw=true"-->
+<!--        />-->
+<!--        <div>-->
+<!--          <h3>Ronny John</h3>-->
+<!--          <ul style="font-size: 2rem">-->
+<!--            <li class="fragment">Técnico em Informática</li>-->
+<!--            <li class="fragment">2º semestre de ADS na Unichristus</li>-->
+<!--            <li class="fragment">Desenvolvedor-->
+<!--              <ul>-->
+<!--                <li class="fragment"><b>PHP</b></li>-->
+<!--                <li class="fragment" style="color: #0008; font-size: 2rem">Javascript, <span style="font-size:1rem">Go e Kotlin</span></li>-->
+<!--              </ul>-->
+<!--            </li>-->
+<!--            <li class="fragment">Voluntário na <span style="color: #2a76dd">Frontend CE</span></li>-->
+<!--            <li class="fragment">Frequentador assíduo do <span style="color: skyblue">PHPinga</span></li>-->
+<!--          </ul>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </section>-->
+
+<!--    <section>-->
+<!--      <h2>Vamos pro assunto!</h2>-->
+<!--    </section>-->
+
+    <section>
+      <p class="">"Corrigi as vulnerabilidades OWASP do meu código. Agora não preciso mais me preocupar, certo?"</p>
+      <p class="fragment" style="color: red;">ERRADO!</p>
+    </section>
+
+    <section>
+      <h4>As suas dependências estão atualizadas?</h4>
+      <p>Pode-se corrigir todo o código escrito por você, mas e o código que você não escreveu?</p>
+      <div style="font-size: 2rem; display: flex; justify-content: center">
+        <div class="fragment">
+          <img src="/img/gep/ex01.png" />
+        </div>
+        <div class="fragment">
+          <img src="/img/gep/ex02.png" />
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Definição</h2>
+      <p>
+        A06:2021 aborda os riscos de utilizar <b>bibliotecas</b>, <b>frameworks</b>, ou outros <b>componentes desatualizados</b>, que podem conter vulnerabilidades conhecidas, expondo a aplicação a ataques.
+      </p>
+    </section>
+
+    <section>
+      <h2>Impacto</h2>
+      <ul>
+        <li>Maior exposição a ataques conhecidos.</li>
+        <li>Comprometimento de todo o sistema devido a falhas de componentes.</li>
+        <li>Dificuldade em manter a segurança da aplicação no longo prazo.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Exemplos de Vulnerabilidades</h2>
+      <ul style="font-size: 2.5rem">
+        <li>Falhas em dependências de gerenciadores de pacotes (npm, pip, composer ou Maven).</li>
+        <li>Exploração de plugins WordPress desatualizados.</li>
+        <li><a href="https://g1.globo.com/tecnologia/noticia/2021/12/14/entenda-o-que-e-log4j-e-a-falha-de-seguranca-que-esta-deixando-empresas-e-especialistas-preocupados.ghtml">Vulnerabilidades em bibliotecas como Log4j (Log4Shell).</a></li>
+      </ul>
+    </section>
+
+    <section style="font-size: 2rem">
+      <h4>Você provavelmente está vulnerável se:</h4>
+      <ul>
+        <li class="fragment">Não souber as versões das suas dependências (incluindo dependências indiretas).</li>
+        <li class="fragment">O software estiver desatualizado (OS, Application Server, DBMS, entre outros).</li>
+        <li class="fragment">Você não faz varreduras por vulnerabilidades regularmente e não acompanha boletins de segurança dos componentes que usa.</li>
+        <li class="fragment">Não testa compatibilidade de bibliotecas.</li>
+        <li class="fragment">
+          <h4 style="color: #646cff"><a href="https://owasp.org/Top10/pt_BR/A05_2021-Security_Misconfiguration/">A05:2021 - Configuração Incorreta de Segurança</a></h4>
+          <ul>
+            <li class="fragment">Configuração dos cabeçalhos.</li>
+            <li class="fragment">Recursos desabilitados ou não configurados.</li>
+            <li class="fragment">Portas, serviços, páginas ou privilégios desnecessários ativados.</li>
+            <li class="fragment">Permissões configuradas incorretamente.</li>
+            <li class="fragment">Mensagens de erro com excesso de informações para os usuários.</li>
+          </ul>
+        </li>
+      </ul>
+    </section>
+
+    <section>
+      <h4>Prevenção</h4>
+      <ul>
+        <li class="fragment">Remover dependências, recursos, arquivos, componentes e documentação não utilizados.</li>
+        <li class="fragment">Manter bibliotecas e componentes sempre atualizados.</li>
+        <li class="fragment">Monitorar vulnerabilidades conhecidas em dependências.</li>
+        <li class="fragment">Utilizar ferramentas de análise de dependências (ex: Snyk, Dependabot).</li>
+      </ul>
+    </section>
+
+    <section>
+      <section>
+        <h4>Ferramentas de análise</h4>
+        <ul>
+          <li>Snyk</li>
+          <li>OWASP Dependency-Check</li>
+          <li>npm audit</li>
+          <li>pip-audit</li>
+        </ul>
+      </section>
+      <section>
+        <div>
+          <img src="/img/gep/ex03.png" alt="Imagem 1">
+
+        </div>
+      </section>
+    </section>
+
+    <section>
+      <h2>Referências</h2>
+      <a style="font-size: 1rem; line-height: 1rem; display: block;color: inherit;text-align: left;" href="https://owasp.org/Top10/en/A06_2021-Vulnerable_and_Outdated_Components/">
+        A06 Vulnerable and Outdated Components - OWASP Top 10:2021,<br><b>&lt;https://owasp.org/Top10/en/A06_2021-Vulnerable_and_Outdated_Components/&gt;</b>
+      </a>
+      <a style="font-size: 1rem; line-height: 1rem; display: block;color: inherit;text-align: left;" href="https://owasp.org/Top10/en/A06_2021-Vulnerable_and_Outdated_Components/">
+        A06 Vulnerable and Outdated Components - OWASP Top 10:2021,<br><b>&lt;https://owasp.org/Top10/en/A06_2021-Vulnerable_and_Outdated_Components/&gt;</b>
+      </a>
+    </section>
+
+    <section>
+      <h2>LinkedIn</h2>
+      <img src="img/qr-code.png" alt="" style="max-height: 50vh">
+    </section>
+  </div>
+</div>
+
+<script src="https://unpkg.com/reveal.js/dist/reveal.js"></script>
+<script>
+  Reveal.initialize({
+    history: true,
+  });
+</script>
+
+</body>
+</html>
