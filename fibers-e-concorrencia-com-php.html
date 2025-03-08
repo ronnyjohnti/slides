@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="utf-8">
+    <title>Fibers e Concorrência no PHP</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/reveal.js/dist/reveal.css">
+    <link rel="stylesheet" href="https://unpkg.com/reveal.js/dist/theme/white.css">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/monokai-sublime.min.css">
+</head>
+<body>
+<div class="reveal">
+    <div class="slides">
+        <section>
+            <h2>Fibers e Concorrência no PHP</h2>
+            <p>Entendendo o Futuro da Execução Assíncrona</p>
+        </section>
+
+        <section>
+            <h2>O Problema da Concorrência</h2>
+            <ul>
+                <li>PHP é tradicionalmente <strong>single-threaded</strong></li>
+                <li>Uso de processos e threads é custoso</li>
+                <li>Callbacks e Promises podem ser difíceis de manter</li>
+                <li>Como resolver isso? <strong class="fragment">Fibers! 🚀</strong></li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>O que são Fibers?</h2>
+            <blockquote>
+                "Fibers são corrotinas de baixo nível para manipulação de concorrência no PHP."
+            </blockquote>
+            <ul>
+                <li>Permitem pausar e retomar a execução</li>
+                <li>Sem necessidade de callbacks ou Promises</li>
+                <li>Melhor controle sobre fluxos assíncronos</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Exemplo de Fiber</h2>
+            <pre><code data-trim class="language-php" data-line-numbers>
+                    $fiber = new Fiber(function() {
+                        echo "Iniciando...\n";
+                        Fiber::suspend();
+                        echo "Resumindo...\n";
+                    });
+
+                    $fiber->start();
+                    echo "Executando algo enquanto suspenso...\n";
+                    $fiber->resume();
+                </code></pre>
+        </section>
+
+        <section>
+            <h2>Por que usar Fibers?</h2>
+            <ul>
+                <li>Evita o caos dos callbacks</li>
+                <li>Melhor legibilidade e manutenção do código</li>
+                <li>Facilita a implementação de tarefas concorrentes</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Fibers no Mundo Real</h2>
+            <p>Imagine um servidor WebSockets em PHP:</p>
+            <pre><code data-trim data-noescape>
+                    $fiber = new Fiber(function() {
+                        while (true) {
+                            $msg = Fiber::suspend();
+                            echo "Mensagem recebida: $msg\n";
+                        }
+                    });
+
+                    $fiber->start();
+                    $fiber->resume("Olá, mundo!");
+                    $fiber->resume("Outra mensagem!");
+                </code></pre>
+        </section>
+
+        <section>
+            <h2>Frameworks que já usam Fibers</h2>
+            <ul>
+                <li><strong>ReactPHP</strong> - Suporte experimental</li>
+                <li><strong>Amphp</strong> - Totalmente baseado em Fibers</li>
+                <li><strong>Swoole</strong> - Usa Fibers para melhor performance</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Conclusão</h2>
+            <ul>
+                <li>Fibers tornam a concorrência mais fácil e eficiente</li>
+                <li>Substituem padrões antigos como callbacks</li>
+                <li>O futuro da execução assíncrona no PHP é promissor!</li>
+            </ul>
+            <p><strong>Obrigado!</strong> 🚀</p>
+        </section>
+
+    </div>
+</div>
+
+<script src="https://unpkg.com/reveal.js/plugin/highlight/highlight.js"></script>
+<script src="https://unpkg.com/reveal.js/dist/reveal.js"></script>
+<script>
+  Reveal.initialize({
+    history: true,
+    plugins: [RevealHighlight],
+  });
+</script>
+</body>
+</html>
