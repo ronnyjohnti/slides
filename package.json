@@ -1,0 +1,10 @@
+{
+  "homepage": "https://slides.ronnyjohnti.dev",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ronnyjohnti/slides.git"
+  },
+  "scripts": {
+    "dev": "php -S 0.0.0.0:8123"
+  }
+}
