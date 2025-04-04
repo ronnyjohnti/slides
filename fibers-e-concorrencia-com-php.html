@@ -47,49 +47,89 @@
         </section>
 
         <section>
-            <h2>O Problema da Concorrência</h2>
-            <ul>
-                <li>PHP é tradicionalmente <strong>single-threaded</strong></li>
-                <li>Uso de processos e threads é custoso</li>
-                <li>Callbacks e Promises podem ser difíceis de manter</li>
-                <li>Como resolver isso? <strong class="fragment">Fibers! 🚀</strong></li>
-            </ul>
+            <h2>Como é a execução do PHP</h2>
+            <p class="fragment r-fit-text">PHP é tradicionalmente <strong>single-threaded</strong><span class="fragment"> com execução sequencial</span></p>
+            <div class="fragment">
+                <img src="/img/fibers/exec.png" alt="">
+                <span style="color:#0009;font-style:italic;font-size:small;">Imagem retirada do vídeo do canal DifferDev</span>
+            </div>
         </section>
 
         <section>
-            <h2>O que são Fibers?</h2>
-            <blockquote>
+            <h2>Fibers</h2>
+            <ul>
+                <li>Podem executar nosso código</li>
+                <li>Podem suspender a própria execução</li>
+                <li>Podem ser retomadas depois em outro lugar</li>
+                <li>Podem cuspir algum valor na suspensão</li>
+            </ul>
+            <blockquote class="fragment">
                 "Fibers são corrotinas de baixo nível para manipulação de concorrência no PHP."
             </blockquote>
-            <ul>
-                <li>Permitem pausar e retomar a execução</li>
-                <li>Sem necessidade de callbacks ou Promises</li>
-                <li>Melhor controle sobre fluxos assíncronos</li>
-            </ul>
         </section>
 
+        <section>
+            <h2>Classe</h2>
+            <pre>
+                <code data-trim class="line-numbers language-php" data-line-numbers="1-4,11">
+                    final class Fiber {
+                        public function __construct(callable $callback) {}
+                        public function start(mixed ...$args): mixed {}
+                        public function resume(mixed $value = null): mixed {}
+                        public function throw(Throwable $exception): mixed {}
+                        public function getReturn(): mixed {}
+                        public function isStarted(): bool {}
+                        public function isSuspended(): bool {}
+                        public function isRunning(): bool {}
+                        public function isTerminated(): bool {}
+                        public static function suspend(mixed $value = null): mixed {}
+                        public static function getCurrent(): ?Fiber {}
+                    }
+                </code>
+            </pre>
+        </section>
         <section>
             <h2>Exemplo de Fiber</h2>
-            <pre><code data-trim class="language-php" data-line-numbers>
-                    $fiber = new Fiber(function() {
-                        echo "Iniciando...\n";
-                        Fiber::suspend();
-                        echo "Resumindo...\n";
-                    });
+            <div style="display:flex;">
 
-                    $fiber->start();
-                    echo "Executando algo enquanto suspenso...\n";
-                    $fiber->resume();
-                </code></pre>
-        </section>
+                <pre style="width: initial;">
+                    <code data-trim class="language-php" data-line-numbers style="font-size: small;max-height: initial;">
+                        function inspire(string $name) {
+                            echo "Essa Fiber é uma $name\n";
+                            $resumeValue = Fiber::suspend($name);
+                            echo "$name $resumeValue\n";
 
-        <section>
-            <h2>Por que usar Fibers?</h2>
-            <ul>
-                <li>Evita o caos dos callbacks</li>
-                <li>Melhor legibilidade e manutenção do código</li>
-                <li>Facilita a implementação de tarefas concorrentes</li>
-            </ul>
+                            return $name;
+                        }
+
+                        $fiber1 = new Fiber(inspire(...));
+                        $fiber2 = new Fiber(inspire(...));
+
+                        $r1 = $fiber1->start('Rapadura');
+                        $r2 = $fiber2->start('PHP');
+
+                        echo "Fiber1 foi suspensa com $r1";
+                        echo "Fiber2 foi suspensa com $r2";
+
+                        $fiber2->resume('is not dead');
+                        $fiber1->resume('is sweet but is not soft');
+
+                        echo "Fiber1 retornou {$fiber1->getReturn()}";
+                        echo "Fiber2 retornou {$fiber2->getReturn()}";
+                    </code>
+                </pre>
+                    <code data-line-numbers data-trim>
+                        Essa Fiber é Rapadura
+                        Essa Fiber é PHP
+                        Fiber1 foi suspensa com Rapadura
+                        Fiber2 foi suspensa com PHP
+                        PHP is not dead
+                        Rapadura is sweet but is not soft
+                        Fiber1 retornou Rapadura
+                        Fiber2 retornou PHP
+                    </code>
+
+            </div>
         </section>
 
         <section>
