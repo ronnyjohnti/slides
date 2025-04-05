@@ -3,10 +3,14 @@
 <head>
     <meta charset="utf-8">
     <title>Fibers e Concorrência no PHP</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://unpkg.com/reveal.js/dist/reveal.css">
-    <link rel="stylesheet" href="https://unpkg.com/reveal.js/dist/theme/white.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/monokai-sublime.min.css">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <link href="https://unpkg.com/reveal.js/dist/reveal.css" rel="stylesheet">
+    <link href="https://unpkg.com/reveal.js/dist/theme/white.css" rel="stylesheet">
+    <!--    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/monokai-sublime.min.css">-->
+    <link crossorigin="anonymous"
+          href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/atom-one-dark.min.css"
+          integrity="sha512-Jk4AqjWsdSzSWCSuQTfYRIF84Rq/eV0G2+tu07byYwHcbTGfdmLrHjUSwvzp5HvbiqK4ibmNwdcG49Y5RGYPTg=="
+          referrerpolicy="no-referrer" rel="stylesheet"/>
 </head>
 <body>
 <div class="reveal">
@@ -21,7 +25,7 @@
 
         <section data-transition="zoom">
             <div style="display:flex; width: 100%;">
-                <img class="r-stretch" style="object-fit:contain" src="img/eu.png" alt="Foto do Ronny John"/>
+                <img alt="Foto do Ronny John" class="r-stretch" src="img/eu.png" style="object-fit:contain"/>
                 <div>
                     <h3>Ronny John</h3>
                     <ul style="font-size: 2rem">
@@ -30,13 +34,14 @@
                         <li class="fragment">Desenvolvedor
                             <ul>
                                 <li class="fragment"><b>PHP</b></li>
-                                <li class="fragment" style="color: #0008; font-size: 2rem">Javascript, <span style="font-size:1rem">Go e Kotlin</span></li>
+                                <li class="fragment" style="color: #0008; font-size: 2rem">Javascript, <span
+                                        style="font-size:1rem">Go e Kotlin</span></li>
                             </ul>
                         </li>
                         <li class="fragment">Frustrado pelo WhatsApp Web
                             <div style="display:flex">
-                                <span class="fragment"><img src="/img/fibers/fail1.png" alt="Não funciona"></span>
-                                <span class="fragment"><img src="/img/fibers/fail2.png" alt="Não serve pra nada"></span>
+                                <span class="fragment"><img alt="Não funciona" src="/img/fibers/fail1.png"></span>
+                                <span class="fragment"><img alt="Não serve pra nada" src="/img/fibers/fail2.png"></span>
                             </div>
                         </li>
                         <li class="fragment">Rato de comunidade</li>
@@ -47,10 +52,11 @@
         </section>
 
         <section>
-            <h2>Como é a execução do PHP</h2>
-            <p class="fragment r-fit-text">PHP é tradicionalmente <strong>single-threaded</strong><span class="fragment"> com execução sequencial</span></p>
+            <span class="fragment fade-out">Fibers</span>
+            <h2 class="fragment">Como é a execução do PHP</h2>
+            <p class="fragment r-fit-text">PHP é tradicionalmente <strong>single-threaded</strong> com execução sequencial</p>
             <div class="fragment">
-                <img src="/img/fibers/exec.png" alt="">
+                <img alt="" src="/img/fibers/exec.png">
                 <span style="color:#0009;font-style:italic;font-size:small;">Imagem retirada do vídeo do canal DifferDev</span>
             </div>
         </section>
@@ -62,6 +68,7 @@
                 <li>Podem suspender a própria execução</li>
                 <li>Podem ser retomadas depois em outro lugar</li>
                 <li>Podem cuspir algum valor na suspensão</li>
+                <li class="highlight-red">Não adiciona multithreading ao PHP</li>
             </ul>
             <blockquote class="fragment">
                 "Fibers são corrotinas de baixo nível para manipulação de concorrência no PHP."
@@ -71,7 +78,7 @@
         <section>
             <h2>Classe</h2>
             <pre>
-                <code data-trim class="line-numbers language-php" data-line-numbers="1-4,11">
+                <code class="line-numbers language-php" data-line-numbers="1-4,11" data-trim>
                     final class Fiber {
                         public function __construct(callable $callback) {}
                         public function start(mixed ...$args): mixed {}
@@ -88,83 +95,121 @@
                 </code>
             </pre>
         </section>
+
         <section>
             <h2>Exemplo de Fiber</h2>
             <div style="display:flex;">
+        <pre style="width: initial;">
+          <code class="language-php has-highlights" data-trim id="first-example" data-line-numbers
+                style="font-size: small;max-height: initial;line-height: initial">
+            function inspire(string $name) {
+              echo "O nome é $name\n";
+              $resumeValue = Fiber::suspend($name[0]);
+              echo "$name $resumeValue\n";
 
-                <pre style="width: initial;">
-                    <code data-trim class="language-php" data-line-numbers style="font-size: small;max-height: initial;">
-                        function inspire(string $name) {
-                            echo "Essa Fiber é uma $name\n";
-                            $resumeValue = Fiber::suspend($name);
-                            echo "$name $resumeValue\n";
+              return $name;
+            }
 
-                            return $name;
-                        }
+            $fiber1 = new Fiber(inspire(...));
+            $fiber2 = new Fiber(inspire(...));
 
-                        $fiber1 = new Fiber(inspire(...));
-                        $fiber2 = new Fiber(inspire(...));
+            $suspend1 = $fiber1->start('Rapadura');
+            $suspend2 = $fiber2->start('PHP');
 
-                        $r1 = $fiber1->start('Rapadura');
-                        $r2 = $fiber2->start('PHP');
+            echo "Fiber1 foi suspensa com $suspend1\n";
+            echo "Fiber2 foi suspensa com $suspend2\n";
 
-                        echo "Fiber1 foi suspensa com $r1";
-                        echo "Fiber2 foi suspensa com $r2";
+            $fiber2->resume('is not dead');
+            $fiber1->resume('is sweet, but is not soft');
 
-                        $fiber2->resume('is not dead');
-                        $fiber1->resume('is sweet but is not soft');
+            echo "Fiber1 retornou {$fiber1->getReturn()}";
+            echo "Fiber2 retornou {$fiber2->getReturn()}";
+          </code>
+        </pre>
 
-                        echo "Fiber1 retornou {$fiber1->getReturn()}";
-                        echo "Fiber2 retornou {$fiber2->getReturn()}";
-                    </code>
-                </pre>
-                    <code data-line-numbers data-trim>
-                        Essa Fiber é Rapadura
-                        Essa Fiber é PHP
-                        Fiber1 foi suspensa com Rapadura
-                        Fiber2 foi suspensa com PHP
-                        PHP is not dead
-                        Rapadura is sweet but is not soft
-                        Fiber1 retornou Rapadura
-                        Fiber2 retornou PHP
-                    </code>
+                <pre>
+          <code class="has-highlights" data-trim data-line-numbers>
+            O nome é Rapadura
+            O nome é PHP
+            Fiber1 foi suspensa com R
+            Fiber2 foi suspensa com P
+            PHP is not dead
+            Rapadura is sweet, but is not soft
+            Fiber1 retornou Rapadura
+            Fiber2 retornou PHP
+          </code>
+        </pre>
+            </div>
 
+            <div style="display:none;">
+                <p class="fragment step-1"></p>
+                <p class="fragment step-2"></p>
+                <p class="fragment step-3"></p>
+                <p class="fragment step-4"></p>
+                <p class="fragment step-5"></p>
+                <p class="fragment step-6"></p>
+                <p class="fragment step-7"></p>
+                <p class="fragment step-8"></p>
             </div>
         </section>
 
         <section>
             <h2>Fibers no Mundo Real</h2>
-            <p>Imagine um servidor WebSockets em PHP:</p>
-            <pre><code data-trim data-noescape>
-                    $fiber = new Fiber(function() {
-                        while (true) {
-                            $msg = Fiber::suspend();
-                            echo "Mensagem recebida: $msg\n";
-                        }
-                    });
+            <pre>
+                <code class="language-php" data-trim style="line-height: initial;font-size: small">
+                    class UrlFetcher {
+                        public string $content = '';
+                        private $fp;
+                        public function __construct(private string $url) {}
 
-                    $fiber->start();
-                    $fiber->resume("Olá, mundo!");
-                    $fiber->resume("Outra mensagem!");
-                </code></pre>
+                        public function start(): void {
+                            $this->fp = @stream_socket_client("tcp://{$this->url}:80", $errno, $errstr, 30);
+                            if (!$this->fp) {
+                                throw new \RuntimeException("Failed to connect: $errstr");
+                            }
+                            stream_set_blocking($this->fp, false);
+                            fwrite($this->fp, "GET / HTTP/1.0\r\nHost: {$this->url}\r\nAccept: */*\r\n\r\n");
+                        }
+                        public function readSomeBytes(): void {
+                            $this->content .= fgets($this->fp, 100);
+                        }
+                        public function isDone(): bool {
+                            return feof($this->fp);
+                        }
+                    }
+                </code>
+            </pre>
+            <section>
+                <pre>
+                    <code class="language-php" data-trim style="line-height: initial;font-size: small">
+                        function fetchUrl(string $url): string {
+                            $fetcher = new UrlFetcher($url);
+                            $fetcher->start();
+                            while (!$fetcher->isDone()) {
+                                $fetcher->readSomeBytes();
+                                Fiber::suspend();
+                            }
+                            return $fetcher->content;
+                        }
+                    </code>
+                </pre>
+            </section>
         </section>
 
         <section>
-            <h2>Frameworks que já usam Fibers</h2>
-            <ul>
-                <li><strong>ReactPHP</strong> - Suporte experimental</li>
-                <li><strong>Amphp</strong> - Totalmente baseado em Fibers</li>
-                <li><strong>Swoole</strong> - Usa Fibers para melhor performance</li>
-            </ul>
-        </section>
+            <h2>Referências</h2>
 
+            <a href="https://youtu.be/jx0c_3J1BV4" target="_blank" rel="noopener noreferrer">PHP Fibers - Milko Kosturkov - PHP UK 2022</a>
+            <br>
+            <a href="https://www.php.net/manual/pt_BR/class.fiber.php" target="_blank" rel="noopener noreferrer">PHP: Fibers - Manual do PHP</a>
+            <br>
+            <a href="https://www.youtube.com/watch?v=P7ucMvlVhGc" target="_blank" rel="noopener noreferrer">PHP Fibers - DifferDev</a>
+            <br>
+            <a href="https://php.watch/versions/8.1/fibers" target="_blank" rel="noopener noreferrer">PHP 8.1: Fibers - PHP Watch</a>
+        </section>
         <section>
             <h2>Conclusão</h2>
-            <ul>
-                <li>Fibers tornam a concorrência mais fácil e eficiente</li>
-                <li>Substituem padrões antigos como callbacks</li>
-                <li>O futuro da execução assíncrona no PHP é promissor!</li>
-            </ul>
+
             <p><strong>Obrigado!</strong> 🚀</p>
         </section>
 
@@ -177,7 +222,66 @@
   Reveal.initialize({
     history: true,
     plugins: [RevealHighlight],
-  });
+  })
+    .then(() => {
+      // Highlight.js
+      const phpCode = document.getElementById('first-example');
+      const output = document.querySelector('pre:has(#first-example) + pre > code');
+
+      const steps = [
+        {phpCode: '1,2,3,4,5,6,7', output: ''},   // Step 1
+        {phpCode: '9,10', output: ''},  // Step 2
+        {phpCode: '2,3,12', output: '1'},    // Step 3
+        {phpCode: '2,3,13', output: '2'},    // Step 4
+        {phpCode: '15,16', output: '3,4'}, // Step 5
+        {phpCode: '4,18', output: '5'},    // Step 6
+        {phpCode: '4,19', output: '6'},    // Step 7
+        {phpCode: '6,21,22', output: '7,8'}  // Step 8
+      ];
+
+      Reveal.on('fragmentshown', (event) => {
+        const stepIndex = Array.from(event.fragments[0].classList)
+          .find(cl => cl.includes('step-'))
+          .split('-')[1] - 1;
+
+        console.log(stepIndex);
+
+        if (stepIndex >= 0 && stepIndex < steps.length) {
+          const { phpCode: phpLines, output: outputLines } = steps[stepIndex];
+
+          phpCode.querySelectorAll('table tr').forEach(line => line.classList.remove('highlight-line'));
+          output.querySelectorAll('table tr').forEach(line => line.classList.remove('highlight-line'));
+
+          phpLines.split(',').forEach(line => {
+            phpCode.querySelector(`table tr:has(>[data-line-number="${line}"])`)?.classList.add('highlight-line');
+          });
+          outputLines.split(',').forEach(line => {
+            output.querySelector(`table tr:has([data-line-number="${line}"])`)?.classList.add('highlight-line');
+          });
+        }
+      });
+
+      Reveal.on('fragmenthidden', event => {
+        const stepIndex = Array.from(event.fragments[0].classList)
+          .find(cl => cl.includes('step-'))
+          .split('-')[1] - 2;
+
+        console.log(stepIndex);
+        phpCode.querySelectorAll('table tr').forEach(line => line.classList.remove('highlight-line'));
+        output.querySelectorAll('table tr').forEach(line => line.classList.remove('highlight-line'));
+
+        if (stepIndex >= 0 && stepIndex < steps.length) {
+          const { phpCode: phpLines, output: outputLines } = steps[stepIndex];
+
+          phpLines.split(',').forEach(line => {
+            phpCode.querySelector(`table tr:has(>[data-line-number="${line}"])`)?.classList?.add('highlight-line');
+          });
+          outputLines.split(',').forEach(line => {
+            output.querySelector(`table tr:has(>[data-line-number="${line}"])`)?.classList?.add('highlight-line');
+          });
+        }
+      });
+    })
 </script>
 </body>
 </html>
