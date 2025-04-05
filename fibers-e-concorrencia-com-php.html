@@ -154,46 +154,8 @@
         </section>
 
         <section>
-            <h2>Fibers no Mundo Real</h2>
-            <pre>
-                <code class="language-php" data-trim style="line-height: initial;font-size: small">
-                    class UrlFetcher {
-                        public string $content = '';
-                        private $fp;
-                        public function __construct(private string $url) {}
-
-                        public function start(): void {
-                            $this->fp = @stream_socket_client("tcp://{$this->url}:80", $errno, $errstr, 30);
-                            if (!$this->fp) {
-                                throw new \RuntimeException("Failed to connect: $errstr");
-                            }
-                            stream_set_blocking($this->fp, false);
-                            fwrite($this->fp, "GET / HTTP/1.0\r\nHost: {$this->url}\r\nAccept: */*\r\n\r\n");
-                        }
-                        public function readSomeBytes(): void {
-                            $this->content .= fgets($this->fp, 100);
-                        }
-                        public function isDone(): bool {
-                            return feof($this->fp);
-                        }
-                    }
-                </code>
-            </pre>
-            <section>
-                <pre>
-                    <code class="language-php" data-trim style="line-height: initial;font-size: small">
-                        function fetchUrl(string $url): string {
-                            $fetcher = new UrlFetcher($url);
-                            $fetcher->start();
-                            while (!$fetcher->isDone()) {
-                                $fetcher->readSomeBytes();
-                                Fiber::suspend();
-                            }
-                            return $fetcher->content;
-                        }
-                    </code>
-                </pre>
-            </section>
+            <h2>Prática</h2>
+            <a href="https://gist.github.com/ronnyjohnti/f21ccf20ed23db3e6f07b641ec22d922" target="_blank" rel="noopener noreferrer">Gist</a>
         </section>
 
         <section>
@@ -208,8 +170,7 @@
             <a href="https://php.watch/versions/8.1/fibers" target="_blank" rel="noopener noreferrer">PHP 8.1: Fibers - PHP Watch</a>
         </section>
         <section>
-            <h2>Conclusão</h2>
-
+            <img src="img/qr-code.png" alt="" style="max-height: 50vh">
             <p><strong>Obrigado!</strong> 🚀</p>
         </section>
 
@@ -242,9 +203,7 @@
       Reveal.on('fragmentshown', (event) => {
         const stepIndex = Array.from(event.fragments[0].classList)
           .find(cl => cl.includes('step-'))
-          .split('-')[1] - 1;
-
-        console.log(stepIndex);
+          ?.split('-')[1] - 1;
 
         if (stepIndex >= 0 && stepIndex < steps.length) {
           const { phpCode: phpLines, output: outputLines } = steps[stepIndex];
@@ -264,9 +223,8 @@
       Reveal.on('fragmenthidden', event => {
         const stepIndex = Array.from(event.fragments[0].classList)
           .find(cl => cl.includes('step-'))
-          .split('-')[1] - 2;
+          ?.split('-')[1] - 2;
 
-        console.log(stepIndex);
         phpCode.querySelectorAll('table tr').forEach(line => line.classList.remove('highlight-line'));
         output.querySelectorAll('table tr').forEach(line => line.classList.remove('highlight-line'));
 
